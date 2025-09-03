@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'git@github.com:dass02072805/Devops_testing.git', credentialsId: 'GitHub_Devops_Key'
+                git branch: 'main', 
+                    url: 'git@github.com:dass02072805/Devops_testing.git', 
+                    credentialsId: 'GitHub_Devops_Key'
             }
         }
 
@@ -19,11 +21,11 @@ pipeline {
         stage('Deploy Container') {
             steps {
                 script {
-                    // Stop and remove old container if it exists
+                    // Stop and remove old container if it exists (running or stopped)
                     sh '''
-                        if [ "$(docker ps -q -f name=my-node-app)" ]; then
-                          docker stop my-node-app
-                          docker rm my-node-app
+                        if [ "$(docker ps -aq -f name=my-node-app)" ]; then
+                           docker stop my-node-app || true
+                           docker rm my-node-app
                         fi
                     '''
                     
